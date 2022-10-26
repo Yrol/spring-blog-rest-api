@@ -1,6 +1,7 @@
 package com.yrol.blog.controller;
 
 import com.yrol.blog.dto.PostDto;
+import com.yrol.blog.dto.PostResponse;
 import com.yrol.blog.service.implementation.PostServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,12 @@ public class PostController {
     }
 
     @GetMapping
-    public List<PostDto> getPosts() {
-        return postService.getAllPosts();
+    @ResponseStatus(HttpStatus.OK)
+    public PostResponse getPosts(@RequestParam(value = "page", defaultValue = "0", required = false) int page,
+                                 @RequestParam(value = "size", defaultValue = "10", required = false) int size,
+                                 @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+                                 @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
+        return postService.getAllPosts(page, size, sortBy, sortDir);
     }
 
     @GetMapping("/{id}")
