@@ -2,9 +2,6 @@ package com.yrol.blog.service;
 
 import com.yrol.blog.dto.PostDto;
 import com.yrol.blog.dto.PostResponse;
-import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 public interface PostService {
 
