@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -25,4 +27,13 @@ public class Post {
 
     @Column(nullable = false)
     private String content;
+
+    /**
+     * Specifying the bidirectional relationship OneToMany where a Post can have many comments.
+     * mappedBy - "post" defined in Comment entity.
+     * Using Set which doesn't allow duplicates unlike List.
+     * orphanRemoval - remove child when parent is removed.
+     * */
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Comment> comments = new HashSet<>();
 }
