@@ -6,6 +6,7 @@ import com.yrol.blog.entity.Post;
 import com.yrol.blog.exception.ResourceNotFoundException;
 import com.yrol.blog.repository.PostRepository;
 import com.yrol.blog.service.PostService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,9 +22,12 @@ public class PostServiceImpl implements PostService {
 
     private PostRepository postRepository;
 
+    private ModelMapper mapper;
+
     @Autowired
-    public PostServiceImpl(PostRepository postRepository) {
+    public PostServiceImpl(PostRepository postRepository, ModelMapper mapper) {
         this.postRepository = postRepository;
+        this.mapper = mapper;
     }
 
     @Override
@@ -81,20 +85,31 @@ public class PostServiceImpl implements PostService {
     }
 
     private PostDto mapToDto(Post post) {
-        PostDto postResponse = new PostDto();
-        postResponse.setId(post.getId());
-        postResponse.setTitle(post.getTitle());
-        postResponse.setDescription(post.getDescription());
-        postResponse.setContent(post.getContent());
 
-        return postResponse;
+        // Method 1: map using setters and getters
+//        PostDto postDto = new PostDto();
+//        postDto.setId(post.getId());
+//        postDto.setTitle(post.getTitle());
+//        postDto.setDescription(post.getDescription());
+//        postDto.setContent(post.getContent());
+
+        // Method 2: using the ModelMapper lib
+        PostDto postDto = mapper.map(post, PostDto.class);
+
+        return postDto;
     }
 
     private Post mapToEntity(PostDto postDto) {
-        Post post = new Post();
-        post.setTitle(postDto.getTitle());
-        post.setDescription(postDto.getDescription());
-        post.setContent(postDto.getTitle());
+
+        // Method 1: map using setters and getters
+//        Post post = new Post();
+//        post.setTitle(postDto.getTitle());
+//        post.setDescription(postDto.getDescription());
+//        post.setContent(postDto.getTitle());
+
+
+        // Method 2: using the ModelMapper lib
+        Post post = mapper.map(postDto, Post.class);
 
         return post;
     }
