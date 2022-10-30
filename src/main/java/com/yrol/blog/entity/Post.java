@@ -1,14 +1,15 @@
 package com.yrol.blog.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+// Disabling @Data and use @Getter and @Setter instead since the toString method in it causing an infinite loop when try retrieve child objects (comments)
+//@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
