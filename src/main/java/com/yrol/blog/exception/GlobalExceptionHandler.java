@@ -39,7 +39,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
-
     /**
      * Handling "spring-boot-starter-validation" bean validation messages (customised response).
      * Mapping in field validation level
