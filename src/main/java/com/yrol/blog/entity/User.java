@@ -26,8 +26,8 @@ public class User {
      * @ManyToMany -  Users can have many Roles vise-versa
      * EAGER loading since we need Roles available upfront as soon as we load a user.
      * CascadeType.ALL - to persist child object along with parent object (ex: when we delete a user a role will also get deleted in the JoinTable table)
-     * joinColumns - User ID as user_id
-     * inverseJoinColumns - Role ID as role_id
+     * joinColumns - User ID (from User) as user_id
+     * inverseJoinColumns - Role ID (from Role) as role_id
      *
      * */
     @ManyToMany(fetch =  FetchType.EAGER, cascade = CascadeType.ALL)

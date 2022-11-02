@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -27,7 +27,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain authorizationManager(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/**").permitAll()
                 .anyRequest()
@@ -38,17 +38,22 @@ public class SecurityConfig {
         return http.build();
     }
 
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
     /**
-     * User Authentication - In-memory
+     * User Authentication using In-Memory
      * Using the encrypted(BCrypt) passwords generated via: https://bcrypt-generator.com/
      */
-    @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .inMemoryAuthentication()
-                .passwordEncoder(new BCryptPasswordEncoder())
-                .withUser("yrol")
-                .password("$2a$12$jvnz5av00xZNOmVwcaFcF.lXJCgtwLWbGys/rOExgcnjJwgpbWvz6") // "password"
-                .roles("ADMIN").and().and().build();
-    }
+//    @Bean
+//    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+//        return http.getSharedObject(AuthenticationManagerBuilder.class)
+//                .inMemoryAuthentication()
+//                .passwordEncoder(new BCryptPasswordEncoder())
+//                .withUser("yrol")
+//                .password("$2a$12$jvnz5av00xZNOmVwcaFcF.lXJCgtwLWbGys/rOExgcnjJwgpbWvz6") // "password"
+//                .roles("ADMIN").and().and().build();
+//    }
 }
