@@ -49,9 +49,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             // Setting in Spring Security
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
-            filterChain.doFilter(request, response);
         }
+
+        filterChain.doFilter(request, response);
     }
 
     /**

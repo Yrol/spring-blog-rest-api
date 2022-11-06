@@ -1,5 +1,7 @@
 package com.yrol.blog.config;
 
+import com.yrol.blog.security.JwtAuthenticationEntryPoint;
+import com.yrol.blog.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -8,9 +10,11 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * A configuration class for handling API security
@@ -21,21 +25,56 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
+    // For handling unauthorised access on application's secure entry points
+    private JwtAuthenticationEntryPoint authenticationEntryPoint;
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter () {
+        return new JwtAuthenticationFilter();
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Basic user authentication - httpBasic()
+     * */
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http.authorizeRequests()
+//                .antMatchers(HttpMethod.GET, "/api/**").permitAll()
+//                .antMatchers("/api/auth/**").permitAll()
+//                .anyRequest()
+//                .authenticated()
+//                .and().httpBasic();
+//
+//        http.csrf().disable();
+//        return http.build();
+//    }
+
+    /**
+     * JWT user authentication
+     * STATELESS - uses when authenticate in JWT
+     * */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/**").permitAll()
                 .antMatchers("/api/auth/**").permitAll()
                 .anyRequest()
-                .authenticated()
-                .and().httpBasic();
+                .authenticated();
 
-        http.csrf().disable();
+        http.csrf().disable()
+                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        // Adding the JWT filter
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 

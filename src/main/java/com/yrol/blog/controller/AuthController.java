@@ -1,11 +1,13 @@
 package com.yrol.blog.controller;
 
+import com.yrol.blog.dto.JwtAuthResponse;
 import com.yrol.blog.dto.LoginDto;
 import com.yrol.blog.dto.SignUpDto;
 import com.yrol.blog.entity.Role;
 import com.yrol.blog.entity.User;
 import com.yrol.blog.repository.RoleRepository;
 import com.yrol.blog.repository.UserRepository;
+import com.yrol.blog.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 
@@ -41,13 +40,37 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JwtTokenProvider tokenProvider;
+
+    /**
+     * Signin when using basic http login (username and password) without JWT
+     * Returns signin successful string message
+     * */
+//    @PostMapping("/signin")
+//    public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginDto) {
+//        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(), loginDto.getPassword()));
+//
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//
+//        return new ResponseEntity<>("User signed in successfully", HttpStatus.OK);
+//    }
+
+
+    /**
+     * Signin when using JWT
+     * Returns JWT token
+     * */
     @PostMapping("/signin")
-    public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<JwtAuthResponse> authenticateUser(@RequestBody LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(), loginDto.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return new ResponseEntity<>("User signed in successfully", HttpStatus.OK);
+        // get token from token provider
+        String token = tokenProvider.generateToken(authentication);
+
+        return ResponseEntity.ok(new JwtAuthResponse(token));
     }
 
     @PostMapping("/signup")
