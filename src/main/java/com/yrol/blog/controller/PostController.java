@@ -4,6 +4,8 @@ import com.yrol.blog.dto.PostDto;
 import com.yrol.blog.dto.PostResponse;
 import com.yrol.blog.service.implementation.PostServiceImpl;
 import com.yrol.blog.utils.AppConstants;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,6 +13,13 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+
+/**
+ * Rest controller for Posts CRUD operations
+ * Swagger Annotations - @Api, @ApiOperation
+ * */
+
+@Api(value = "REST API for Post CRUD operations")
 @RestController
 @RequestMapping("api/v1/posts")
 public class PostController {
@@ -21,12 +30,14 @@ public class PostController {
         this.postService = postService;
     }
 
+    @ApiOperation(value = "REST API for post creation")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<PostDto> createPost(@RequestBody @Valid PostDto postDto) {
         return new ResponseEntity<>(postService.createPost(postDto), HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "REST API for fetching posts")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public PostResponse getPosts(@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int page,
@@ -36,17 +47,21 @@ public class PostController {
         return postService.getAllPosts(page, size, sortBy, sortDir);
     }
 
+
+    @ApiOperation(value = "REST API for fetching posts by ID")
     @GetMapping("/{id}")
     public ResponseEntity<PostDto> getPostById(@PathVariable(name = "id") Long id) {
         return new ResponseEntity<>(postService.findPostById(id), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "REST API for updating posts by ID")
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{id}")
     public ResponseEntity<PostDto> updatePost(@PathVariable(name = "id") Long id, @RequestBody @Valid PostDto postDto) {
         return new ResponseEntity<>(postService.updatePost(postDto, id), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "REST API for deleting posts by ID")
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

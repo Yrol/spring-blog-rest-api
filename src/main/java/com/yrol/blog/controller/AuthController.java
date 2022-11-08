@@ -8,6 +8,8 @@ import com.yrol.blog.entity.User;
 import com.yrol.blog.repository.RoleRepository;
 import com.yrol.blog.repository.UserRepository;
 import com.yrol.blog.security.JwtTokenProvider;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +23,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 
 /**
- * Controller for Login and Sign up
+ * Rest controller for Login and Sign up
+ * Swagger Annotations - @Api, @ApiOperation
  * */
 
+@Api(value = "Auth controller exposes Register and Login APIs")
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -61,6 +65,8 @@ public class AuthController {
      * Signin when using JWT
      * Returns JWT token
      * */
+
+    @ApiOperation(value = "REST API for user Login")
     @PostMapping("/signin")
     public ResponseEntity<JwtAuthResponse> authenticateUser(@RequestBody LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(), loginDto.getPassword()));
@@ -73,6 +79,7 @@ public class AuthController {
         return ResponseEntity.ok(new JwtAuthResponse(token));
     }
 
+    @ApiOperation(value = "REST API for user Register")
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignUpDto signUpDto) {
         if (userRepository.existsByUsername(signUpDto.getUsername())) {
