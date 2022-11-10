@@ -6,6 +6,7 @@ import com.yrol.blog.entity.Post;
 import com.yrol.blog.exception.ResourceNotFoundException;
 import com.yrol.blog.repository.PostRepository;
 import com.yrol.blog.service.PostService;
+import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,6 +77,36 @@ public class PostServiceImpl implements PostService {
         Post updatedPost = postRepository.save(post);
 
         return this.mapToDto(updatedPost);
+    }
+
+    @Override
+    public PostResponse searchPosts(int page, int size, String sortBy, String sortDir, String query) {
+
+        StringBuilder words = new StringBuilder();
+
+        List<String> searchTerms = Arrays.stream(query.split(" ")).collect(Collectors.toList());
+
+        if (searchTerms.size() == 1 && StringUtils.isNotEmpty(searchTerms.get(0))) {
+            words.append("%").append(searchTerms.get(0)).append("%");
+        } else {
+            searchTerms.stream()
+                    .filter(StringUtils::isNotEmpty)
+                    .forEach(s -> {
+                        words.append("%").append(s).append("%");
+                    });
+        }
+
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Post> posts = postRepository.searchPosts(words.toString(), pageable);
+
+        List<Post> listOfPost = posts.getContent();
+
+        List<PostDto> content = listOfPost.stream().map(post -> mapToDto(post)).collect(Collectors.toList());
+
+        return new PostResponse(content, posts.getNumber(), posts.getSize(), posts.getTotalElements(), posts.getTotalPages(), posts.isLast());
     }
 
     @Override

@@ -3,6 +3,8 @@ package com.yrol.blog.service;
 import com.yrol.blog.dto.PostDto;
 import com.yrol.blog.dto.PostResponse;
 
+import java.util.List;
+
 public interface PostService {
 
     PostDto createPost(PostDto postDto);
@@ -12,6 +14,8 @@ public interface PostService {
     PostDto findPostById(Long id);
 
     PostDto updatePost(PostDto postDto, Long id);
+
+    PostResponse searchPosts(int page, int size, String sortBy, String sortDir, String query);
 
     void deletePost(Long id);
 }

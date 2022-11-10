@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-
 /**
  * Rest controller for Posts CRUD operations
  * Swagger Annotations - @Api, @ApiOperation
@@ -37,7 +36,7 @@ public class PostController {
         return new ResponseEntity<>(postService.createPost(postDto), HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "REST API for fetching posts")
+    @ApiOperation(value = "REST API for fetching posts (with optional pagination params)")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public PostResponse getPosts(@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int page,
@@ -52,6 +51,17 @@ public class PostController {
     @GetMapping("/{id}")
     public ResponseEntity<PostDto> getPostById(@PathVariable(name = "id") Long id) {
         return new ResponseEntity<>(postService.findPostById(id), HttpStatus.OK);
+    }
+
+
+    @ApiOperation(value = "REST API for searching Posts by title or description (with optional pagination params)")
+    @GetMapping("/search")
+    public PostResponse searchPosts(@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int page,
+                                    @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) int size,
+                                    @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy,
+                                    @RequestParam(value = "sortDir", defaultValue = AppConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir,
+                                    @RequestParam(value = "query", required = true) String query) {
+        return postService.searchPosts(page, size, sortBy, sortDir, query);
     }
 
     @ApiOperation(value = "REST API for updating posts by ID")
