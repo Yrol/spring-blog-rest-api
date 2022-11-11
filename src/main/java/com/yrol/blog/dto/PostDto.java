@@ -36,4 +36,7 @@ public class PostDto {
 
     @ApiModelProperty(value = "Blog post comments")
     private Set<CommentDto> comments;
+
+    @ApiModelProperty(value = "Blog post creator")
+    private UserDto user;
 }
