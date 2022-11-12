@@ -6,8 +6,8 @@ import com.yrol.blog.entity.Post;
 import com.yrol.blog.entity.User;
 import com.yrol.blog.exception.ResourceNotFoundException;
 import com.yrol.blog.repository.PostRepository;
-import com.yrol.blog.repository.UserRepository;
 import com.yrol.blog.service.PostService;
+import com.yrol.blog.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +15,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,27 +28,24 @@ public class PostServiceImpl implements PostService {
 
     private ModelMapper mapper;
 
-    private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
+
 
     @Autowired
-    public PostServiceImpl(PostRepository postRepository, UserRepository userRepository, ModelMapper mapper) {
+    public PostServiceImpl(PostRepository postRepository, ModelMapper mapper) {
         this.postRepository = postRepository;
-        this.userRepository = userRepository;
         this.mapper = mapper;
     }
 
     @Override
     public PostDto createPost(PostDto postDto) {
 
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        String username = userDetails.getUsername();
-
-        Optional<User> user = userRepository.findByEmail(username);
-
         Post post = this.mapToEntity(postDto);
 
-        post.setUser(user.get());
+        User currentUser = userService.getCurrentUser();
+
+        post.setUser(currentUser);
 
         // save to DB
         Post newPost = postRepository.save(post);

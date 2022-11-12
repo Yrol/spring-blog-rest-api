@@ -3,8 +3,6 @@ package com.yrol.blog.service;
 import com.yrol.blog.dto.PostDto;
 import com.yrol.blog.dto.PostResponse;
 
-import java.util.List;
-
 public interface PostService {
 
     PostDto createPost(PostDto postDto);
