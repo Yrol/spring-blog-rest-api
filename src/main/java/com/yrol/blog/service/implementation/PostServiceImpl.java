@@ -4,6 +4,7 @@ import com.yrol.blog.dto.PostDto;
 import com.yrol.blog.dto.PostResponse;
 import com.yrol.blog.entity.Post;
 import com.yrol.blog.entity.User;
+import com.yrol.blog.exception.BlogAPIException;
 import com.yrol.blog.exception.ResourceNotFoundException;
 import com.yrol.blog.repository.PostRepository;
 import com.yrol.blog.service.PostService;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -40,6 +42,12 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDto createPost(PostDto postDto) {
+
+        String postTitle = (postDto.getTitle().toString()).trim();
+
+        if (postRepository.findByTitle(postTitle) != null) {
+            throw new BlogAPIException(HttpStatus.BAD_REQUEST, "Post with the same Title already exists. Please choose a different title.");
+        }
 
         Post post = this.mapToEntity(postDto);
 

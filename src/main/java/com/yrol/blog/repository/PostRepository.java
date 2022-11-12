@@ -12,4 +12,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(value = "SELECT * FROM posts p WHERE p.title iLIKE(:query) " +
             "OR p.description iLIKE(:query)", nativeQuery = true)
     Page<Post> searchPosts(String query, Pageable pageable);
+
+    public Post findByTitle(String title);
 }
