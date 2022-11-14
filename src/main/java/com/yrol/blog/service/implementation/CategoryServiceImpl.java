@@ -3,6 +3,7 @@ package com.yrol.blog.service.implementation;
 import com.yrol.blog.dto.CategoryDto;
 import com.yrol.blog.entity.Category;
 import com.yrol.blog.exception.BlogAPIException;
+import com.yrol.blog.exception.ResourceNotFoundException;
 import com.yrol.blog.repository.CategoryRepository;
 import com.yrol.blog.service.CategoryService;
 import org.modelmapper.ModelMapper;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -40,12 +42,17 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> getAllCategories() {
-        return null;
+        List<Category> listOfCategories = categoryRepository.findAll();
+
+        // using Lambda Expressions and mapToDto custom function to map
+        List<CategoryDto> categories = listOfCategories.stream().map(category -> mapToDto(category)).collect(Collectors.toList());
+        return categories;
     }
 
     @Override
     public CategoryDto findCategoryById(long id) {
-        return null;
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category", "id", String.valueOf(id)));;
+        return mapToDto(category);
     }
 
     @Override

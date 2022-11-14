@@ -7,7 +7,5 @@ import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    public Category findById(long id);
-
     public List<Category> findByTitleIgnoreCase(String title);
 }
