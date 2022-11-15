@@ -45,7 +45,7 @@ public class PostServiceImpl implements PostService {
 
         String postTitle = (postDto.getTitle().toString()).trim();
 
-        if (postRepository.findByTitle(postTitle) != null) {
+        if (postRepository.findByTitleIgnoreCase(postTitle) != null) {
             throw new BlogAPIException(HttpStatus.BAD_REQUEST, "Post with the same Title already exists. Please choose a different title.");
         }
 

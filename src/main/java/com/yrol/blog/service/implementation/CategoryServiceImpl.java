@@ -57,12 +57,30 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto updateCategory(CategoryDto categoryDto, long id) {
-        return null;
+        String categoryTitle = (categoryDto.getTitle()).trim();
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category", "id", String.valueOf(id)));
+
+        // Check if category already exists by title with a different ID
+        categoryRepository.findByTitleIgnoreCase(categoryTitle).stream()
+                .forEach(cat -> {
+                    if (cat.getTitle().toLowerCase().equals(categoryTitle.toLowerCase()) && !cat.getId().equals(id)) {
+                        throw new BlogAPIException(HttpStatus.BAD_REQUEST, String.format("Category %s already exists.", categoryTitle));
+                    }
+                });
+
+        category.setTitle(categoryDto.getTitle());
+        category.setDescription(categoryDto.getDescription());
+
+        Category updatedCategory = categoryRepository.save(category);
+
+        return this.mapToDto(updatedCategory);
     }
 
     @Override
     public void deleteCategory(long id) {
-
+        if (categoryRepository.existsById(id)) {
+            categoryRepository.deleteById(id);
+        }
     }
 
     private CategoryDto mapToDto(Category category) {
