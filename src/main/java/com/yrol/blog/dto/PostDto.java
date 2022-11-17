@@ -1,5 +1,6 @@
 package com.yrol.blog.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -36,6 +37,9 @@ public class PostDto {
 
     @ApiModelProperty(value = "Blog post comments")
     private Set<CommentDto> comments;
+
+    @ApiModelProperty(value = "Blog post category")
+    private CategoryDto category;
 
     @ApiModelProperty(value = "Blog post creator")
     private UserDto user;

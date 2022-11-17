@@ -2,10 +2,12 @@ package com.yrol.blog.service.implementation;
 
 import com.yrol.blog.dto.PostDto;
 import com.yrol.blog.dto.PostResponse;
+import com.yrol.blog.entity.Category;
 import com.yrol.blog.entity.Post;
 import com.yrol.blog.entity.User;
 import com.yrol.blog.exception.BlogAPIException;
 import com.yrol.blog.exception.ResourceNotFoundException;
+import com.yrol.blog.repository.CategoryRepository;
 import com.yrol.blog.repository.PostRepository;
 import com.yrol.blog.service.PostService;
 import com.yrol.blog.service.UserService;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +35,9 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    CategoryRepository categoryRepository;
 
 
     @Autowired
@@ -54,6 +60,14 @@ public class PostServiceImpl implements PostService {
         User currentUser = userService.getCurrentUser();
 
         post.setUser(currentUser);
+
+        Optional<Category> category = categoryRepository.findById(postDto.getCategory().getId());
+
+        if(category.isEmpty()){
+            throw new BlogAPIException(HttpStatus.BAD_REQUEST, "Invalid category provided.");
+        }
+
+        post.setCategory(category.get());
 
         // save to DB
         Post newPost = postRepository.save(post);
