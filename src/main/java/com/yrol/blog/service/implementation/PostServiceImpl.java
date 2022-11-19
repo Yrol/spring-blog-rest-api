@@ -61,9 +61,9 @@ public class PostServiceImpl implements PostService {
 
         post.setUser(currentUser);
 
-        Optional<Category> category = categoryRepository.findById(postDto.getCategory().getId());
+        Optional<Category> category = postDto.getCategory() != null ? categoryRepository.findById(postDto.getCategory().getId()) : null;
 
-        if(category.isEmpty()){
+        if (category == null || category.isEmpty()){
             throw new BlogAPIException(HttpStatus.BAD_REQUEST, "Invalid category provided.");
         }
 

@@ -7,18 +7,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 // Disabling @Data and use @Getter and @Setter instead since the toString method in it causing an infinite loop when try retrieve child objects (comments)
-//@Data
+// @Data
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "posts", uniqueConstraints = {@UniqueConstraint(columnNames = {"title"})})
-public class Post {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Post extends BaseEntity {
 
     @Column(nullable = false)
     private String title;
