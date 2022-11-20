@@ -15,6 +15,8 @@ public class Comment extends BaseEntity {
 
     private String name;
     private String email;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String body;
 
     /**

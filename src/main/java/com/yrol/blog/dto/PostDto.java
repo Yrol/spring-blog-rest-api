@@ -26,7 +26,7 @@ public class PostDto {
 
     @ApiModelProperty(value = "Blog post description")
     @NotBlank
-    @Size(min = 2, message = "Description must contain at least 2 characters.")
+    @Size(min = 2, max = 500, message = "Description must be between 2 to 500 characters.")
     private String description;
 
     @ApiModelProperty(value = "Blog post content")

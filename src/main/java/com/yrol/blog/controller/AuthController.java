@@ -20,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Collections;
 
 /**
@@ -68,7 +69,7 @@ public class AuthController {
 
     @ApiOperation(value = "REST API for user Login")
     @PostMapping("/signin")
-    public ResponseEntity<JwtAuthResponse> authenticateUser(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<JwtAuthResponse> authenticateUser(@RequestBody @Valid LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(), loginDto.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -81,7 +82,7 @@ public class AuthController {
 
     @ApiOperation(value = "REST API for user Register")
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody SignUpDto signUpDto) {
+    public ResponseEntity<?> registerUser(@RequestBody @Valid SignUpDto signUpDto) {
         if (userRepository.existsByUsername(signUpDto.getUsername())) {
             return new ResponseEntity<>("Username already exists", HttpStatus.BAD_REQUEST);
         }

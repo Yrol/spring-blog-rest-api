@@ -19,10 +19,11 @@ public class Post extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
-    @Column(nullable = false)
+    // @Lob for large object
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
     /**

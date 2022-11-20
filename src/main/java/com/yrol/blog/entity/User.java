@@ -1,6 +1,5 @@
 package com.yrol.blog.entity;
 
-
 import lombok.Data;
 
 import javax.persistence.*;
@@ -18,9 +17,17 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
     private String username;
+
+    @Column(nullable = false)
     private String email;
+
+    @Column(nullable = false)
     private String password;
 
     /**

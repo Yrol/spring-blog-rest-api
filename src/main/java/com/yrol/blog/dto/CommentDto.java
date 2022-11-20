@@ -29,7 +29,7 @@ public class CommentDto {
     @Email
     private String email;
 
-    @ApiModelProperty(value = "Comment description")
+    @ApiModelProperty(value = "Comment body")
     @NotBlank
     @Size(min = 2, max = 600, message = "Size must be 2 to 600 characters.")
     private String body;

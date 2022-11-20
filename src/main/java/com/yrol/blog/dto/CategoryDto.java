@@ -23,7 +23,7 @@ public class CategoryDto {
     private String title;
 
     @ApiModelProperty(value = "Category description")
-    @Size(min = 2, message = "Description must contain at least 2 characters.")
+    @Size(min = 2, max = 500, message = "Title must be between 2 to 500 characters.")
     private String description;
 
 }
