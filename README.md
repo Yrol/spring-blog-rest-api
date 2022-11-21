@@ -28,3 +28,16 @@ Location `http://localhost:8080/swagger-ui/`
 ## Postman collection
 The exported Postman collection with all the API endpoints can be found in `postman_collection` directory.
 
+## Package and run project as a JAR file
+
++ **Step 1:** Building the project.<br />
+  In the Maven tab, select `clean` and `install` options and click on `Run Maven Build` option. JAR file will be created in the `taeget` directory. 
+  <p><img src="https://i.imgur.com/QMRkFui.png"></img></p>
+  
++ **Step 2:** Running the project using JAR.<br />
+  Once the project is build and JAR is generated successfully, expand the `target` folder and run the project.
+  <p><img src="https://i.imgur.com/PyXb580.png"></img></p>
+  
+
+  The Project should run in `http://localhost:8080/`
+
