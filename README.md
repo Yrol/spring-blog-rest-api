@@ -14,6 +14,8 @@
 ## Prerequisites
 - Java 11 or above
 - Postgresql - make sure the instance is up and running at port `5432` and the DB called `blog_app` already exist.
+- User roles - After the application is started and tables are created, add roles `ROLE_ADMIN` and `ROLE_USER` to the `roles` table.
+  <p><img src="https://i.imgur.com/lyLdaZe.png"></img></p>
 
 
 ## Running the project locally in IntelliJ CE
