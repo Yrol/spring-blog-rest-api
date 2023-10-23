@@ -14,6 +14,8 @@
 ## Prerequisites
 - Java 11 or above
 - Postgresql - make sure the instance is up and running at port `5432` and the DB called `blog_app` already exist.
+- User roles - After the application is started and tables are created, add roles `ROLE_ADMIN` and `ROLE_USER` to the `roles` table.
+  <p><img src="https://i.imgur.com/lyLdaZe.png"></img></p>
 
 
 ## Running the project locally in IntelliJ CE
@@ -27,4 +29,17 @@ Location `http://localhost:8080/swagger-ui/`
 
 ## Postman collection
 The exported Postman collection with all the API endpoints can be found in `postman_collection` directory.
+
+## Package and run project as a JAR file
+
++ **Step 1:** Building the project.<br />
+  In the Maven tab, select `clean` and `install` options and click on `Run Maven Build` option. JAR file will be created in the `taeget` directory. 
+  <p><img src="https://i.imgur.com/QMRkFui.png"></img></p>
+  
++ **Step 2:** Running the project using JAR.<br />
+  Once the project is build and JAR is generated successfully, expand the `target` folder and run the project.
+  <p><img src="https://i.imgur.com/PyXb580.png"></img></p>
+  
+
+  The Project should run in `http://localhost:8080/`
 
