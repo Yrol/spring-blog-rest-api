@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,7 @@ import com.yrol.blog.repository.PostRepository;
 import com.yrol.blog.utils.AppConstants;
 
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class PostEntityIntegrationTest {
 
     @Autowired
@@ -121,31 +123,64 @@ public class PostEntityIntegrationTest {
         Assertions.assertEquals(searchedPost.getId(), post.getId(), "There should be at least one post");
     }
 
-    // @Test
-    // void testSearchPosts_whenGivenCloselyMatchingTitleOrDescription_returnPost()
-    // {
+    @Test
+    void testSearchPosts_whenGivenCloselyMatchingTitleOrDescription_returnPost() {
 
-    // String roleName = "ROLE_ADMIN";
+        String roleName = "ROLE_ADMIN";
 
-    // Role role = this.createRole(roleName);
+        Role role = this.createRole(roleName);
 
-    // Set<Role> roles = new HashSet<Role>();
-    // roles.add(role);
+        Set<Role> roles = new HashSet<Role>();
+        roles.add(role);
 
-    // User user = this.createNewUser(roles);
+        User user = this.createNewUser(roles);
 
-    // post.setUser(testEntityManager.persistAndFlush(user));
+        post.setUser(testEntityManager.persistAndFlush(user));
 
-    // Pageable pageable = PageRequest.of(1, 1,
-    // Sort.by(AppConstants.DEFAULT_SORT_BY).ascending());
+        Pageable pageable = PageRequest.of(0, 1,
+                Sort.by(AppConstants.DEFAULT_SORT_BY).ascending());
 
-    // // Act
-    // testEntityManager.persistAndFlush(post);
+        // Act
+        // testEntityManager.persistAndFlush(post);
+        postRepository.save(post);
 
-    // Page<Post> posts = postRepository.searchPosts("%Ferrari%", pageable);
+        Page<Post> posts = postRepository.searchPosts("%Ferarri%", pageable);
 
-    // Assertions.assertEquals(posts.getSize(), 1);
-    // }
+        if (!posts.getContent().isEmpty()) {
+            Assertions.assertEquals(post.getTitle(), posts.getContent().get(0).getTitle(),
+                    String.format("Title should match: %s", post.getTitle()));
+            Assertions.assertEquals(post.getId(), posts.getContent().get(0).getId(),
+                    String.format("ID should match: %s", post.getId()));
+        } else {
+            Assertions.fail("The keyword doesn't match the content");
+        }
+    }
+
+    @Test
+    void testSearchPosts_whenGivenNotMatchingTitleOrDescription_shouldNotReturnPosts() {
+
+        String roleName = "ROLE_ADMIN";
+
+        Role role = this.createRole(roleName);
+
+        Set<Role> roles = new HashSet<Role>();
+        roles.add(role);
+
+        User user = this.createNewUser(roles);
+
+        post.setUser(testEntityManager.persistAndFlush(user));
+
+        Pageable pageable = PageRequest.of(0, 1,
+                Sort.by(AppConstants.DEFAULT_SORT_BY).ascending());
+
+        // Act
+        // testEntityManager.persistAndFlush(post);
+        postRepository.save(post);
+
+        Page<Post> posts = postRepository.searchPosts("%Lamborghini%", pageable);
+
+        Assertions.assertEquals(true, posts.getContent().isEmpty());
+    }
 
     private Role createRole(String roleName) {
         Role role = new Role();
