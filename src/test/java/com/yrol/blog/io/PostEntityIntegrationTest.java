@@ -68,7 +68,7 @@ public class PostEntityIntegrationTest {
         Post savedPost = testEntityManager.persistAndFlush(post);
 
         // Assert
-        Assertions.assertEquals(savedPost.getId(), post.getId(),
+        Assertions.assertEquals(post.getId(), savedPost.getId(),
                 String.format("Post ID should be equal to:", post.getId()));
         Assertions.assertEquals(savedPost.getComments().size(), 0, "Post should not have any comments");
     }
@@ -94,7 +94,7 @@ public class PostEntityIntegrationTest {
         this.createComment(savedPost); // assign the post to the comment(vise-versa also valid).
 
         // Assert
-        Assertions.assertEquals(savedPost.getId(), post.getId(),
+        Assertions.assertEquals(post.getId(), savedPost.getId(),
                 String.format("Post ID should be equal to:", post.getId()));
 
         Assertions.assertEquals(1, 1, "Post should have at least one comment");
@@ -120,7 +120,7 @@ public class PostEntityIntegrationTest {
 
         Post searchedPost = postRepository.findByTitleIgnoreCase("Ferarri f40");
 
-        Assertions.assertEquals(searchedPost.getId(), post.getId(), "There should be at least one post");
+        Assertions.assertEquals(post.getId(), searchedPost.getId(), "There should be at least one post");
     }
 
     @Test

@@ -63,8 +63,8 @@ public class UserEntityIntegrationTest {
         // Assert
         Assertions.assertEquals(storedUser.getName() == user.getName(), true,
                 String.format("Name should match:%s", user.getName()));
-        Assertions.assertEquals(storedUser.getRoles().size(), 1, "User should have at least one role assigned");
-        Assertions.assertEquals(storedUser.getPosts().size(), 0, "User should not have any posts");
+        Assertions.assertEquals(1, storedUser.getRoles().size(), "User should have at least one role assigned");
+        Assertions.assertEquals(0, storedUser.getPosts().size(), "User should not have any posts");
     }
 
     @Test
@@ -96,7 +96,8 @@ public class UserEntityIntegrationTest {
         Optional<User> users = userRepository.findByEmail(userEmail);
 
         // Assert
-        Assertions.assertEquals(users.get().getEmail(), userEmail);
+        Assertions.assertEquals(userEmail, users.get().getEmail(),
+                String.format("The email should match: %s", userEmail));
     }
 
     @Test
@@ -109,8 +110,8 @@ public class UserEntityIntegrationTest {
         Optional<User> storedUser = userRepository.findByUsernameOrEmail("James", userEmail);
 
         // Assert
-        Assertions.assertEquals(storedUser.isPresent(), true, "User should exist");
-        Assertions.assertEquals(storedUser.get().getEmail(), user.getEmail(),
+        Assertions.assertEquals(true, storedUser.isPresent(), "User should exist");
+        Assertions.assertEquals(user.getEmail(), storedUser.get().getEmail(),
                 String.format("The email should match:%s", user.getEmail()));
 
     }
