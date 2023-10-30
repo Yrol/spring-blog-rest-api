@@ -29,7 +29,6 @@ import java.util.List;
 import com.yrol.blog.controller.CommentController;
 import com.yrol.blog.dto.CommentDto;
 import com.yrol.blog.entity.Comment;
-import com.yrol.blog.entity.Post;
 
 @WebMvcTest(controllers = CommentController.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -39,15 +38,13 @@ public class CommentControllerWebLayerTest {
     private MockMvc mockMvc;
 
     /**
-     * Using MockBean to mock the PostService layer. This will be added to the
+     * Using MockBean to mock the CommentService layer. This will be added to the
      * Spring context.
      */
     @MockBean
     CommentServiceImpl commentService;
 
     Comment comment;
-
-    Post post;
 
     @BeforeEach
     void setUp() {
@@ -126,7 +123,6 @@ public class CommentControllerWebLayerTest {
         Assertions.assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus(),
                 "Incorrect HTTP Status Code returned.");
         Assertions.assertNotNull(responseBodyAsString);
-
     }
 
     @Test
