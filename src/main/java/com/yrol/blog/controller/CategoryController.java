@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-
 /**
  * Rest controller for Categories CRUD operations
  * Swagger Annotations - @Api, @ApiOperation
- * */
+ */
 
 @Api(value = "REST API for Category CRUD operations")
 @RestController
@@ -32,7 +31,7 @@ public class CategoryController {
     @ApiOperation(value = "REST API for Category creation")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<CategoryDto> createPost(@RequestBody @Valid CategoryDto categoryDto) {
+    public ResponseEntity<CategoryDto> createCategory(@RequestBody @Valid CategoryDto categoryDto) {
         return new ResponseEntity<>(categoryService.createCategory(categoryDto), HttpStatus.CREATED);
     }
 
@@ -51,7 +50,8 @@ public class CategoryController {
     @ApiOperation(value = "REST API for updating categories by ID")
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{id}")
-    public ResponseEntity<CategoryDto> updateCategory(@RequestBody @Valid CategoryDto categoryDto, @PathVariable(name = "id") long id) {
+    public ResponseEntity<CategoryDto> updateCategory(@RequestBody @Valid CategoryDto categoryDto,
+            @PathVariable(name = "id") long id) {
         return new ResponseEntity<>(categoryService.updateCategory(categoryDto, id), HttpStatus.OK);
     }
 
