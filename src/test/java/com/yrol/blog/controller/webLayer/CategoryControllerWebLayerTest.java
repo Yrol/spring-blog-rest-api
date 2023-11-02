@@ -52,7 +52,6 @@ public class CategoryControllerWebLayerTest {
 
     @Test
     @DisplayName("Create Category successfully")
-
     void testCreateCategory_whenValidCategoryDetailsProvided_returnNewCategory() throws Exception {
         // Arrange
         CategoryDto categoryDto = new ModelMapper().map(category, CategoryDto.class);

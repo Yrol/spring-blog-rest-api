@@ -102,6 +102,14 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Use only within test scope for RestTemplate (PATCH) -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.4.1</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
