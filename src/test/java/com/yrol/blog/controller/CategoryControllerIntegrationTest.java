@@ -84,7 +84,7 @@ public class CategoryControllerIntegrationTest {
 
     @Test
     @DisplayName("Category can be created")
-    void testCreateCategory_whenValidDetailsProvided_newCategoryWillBeCreated() throws JSONException {
+    void testCreateCategory_whenValidDetailsProvided_returnNewCategory() throws JSONException {
 
         // Arrange
         String accessToken = this.signInUser();
@@ -199,10 +199,11 @@ public class CategoryControllerIntegrationTest {
         category.setId((long) 1);
         category.setTitle(categoryTitle);
         category.setDescription(categoryDescription);
-        categoryRepository.save(category);
+        Category savedCategory = categoryRepository.save(category);
 
         // Act
-        ResponseEntity<CategoryDto> getCategoryResponse = testRestTemplate.exchange("/api/v1/categories/1",
+        ResponseEntity<CategoryDto> getCategoryResponse = testRestTemplate.exchange(
+                "/api/v1/categories/" + savedCategory.getId(),
                 HttpMethod.GET,
                 new HttpEntity<>(this.setBasicHeaders()),
                 new ParameterizedTypeReference<CategoryDto>() {
@@ -245,7 +246,7 @@ public class CategoryControllerIntegrationTest {
     @DisplayName("Update a category")
     void testUpdateCategories_whenValidCategoryDetailsProvided_returnUpdatedCategory() throws JSONException {
 
-        // Setup required for PATCH since TestRestTemplate doesn't support out of the
+        // Setup required for PATCH since TestRestTemplate doesn't support it out of the
         // box
         patchRestTemplate = testRestTemplate.getRestTemplate();
         HttpClient httpClient = HttpClientBuilder.create().build();
