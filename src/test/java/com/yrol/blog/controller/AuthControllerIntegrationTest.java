@@ -31,10 +31,13 @@ public class AuthControllerIntegrationTest {
 
     @BeforeEach
     void setUp() {
+
         String roleName = "ROLE_ADMIN";
-        Role role = new Role();
-        role.setName(roleName);
-        roleRepository.save(role);
+        if(roleRepository.findByName(roleName).isEmpty()) {
+            Role role = new Role();
+            role.setName(roleName);
+            roleRepository.save(role);
+        }
     }
 
     @Test

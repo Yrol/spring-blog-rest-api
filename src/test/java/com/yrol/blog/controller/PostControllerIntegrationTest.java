@@ -74,7 +74,9 @@ public class PostControllerIntegrationTest {
         Role role = new Role();
         role.setId(1);
         role.setName(roleName);
-        roleRepository.save(role);
+        if(roleRepository.findByName(roleName).isEmpty()) {
+            roleRepository.save(role);
+        }
 
         Set<Role> roles = new HashSet<Role>();
         roles.add(role);
