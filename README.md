@@ -46,7 +46,7 @@ The exported Postman collection with all the API endpoints can be found in `post
 ## Test case execution
 
 #### Prerequisites
-* Docker up and running.
+* Docker up and running (to spin up a PostgreSQL DB server instead of H2 since the project consist of Postgres queries).
 
 
 #### What is covered
