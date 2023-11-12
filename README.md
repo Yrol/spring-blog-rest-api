@@ -53,7 +53,7 @@ The exported Postman collection with all the API endpoints can be found in `post
 The test cases are located in `src/test`. The following tests have been covered.
 * WebLayer Testing (mock service layer & etc).
 * Entity and Repository Layer isolated testing.
-* Integration testing (complete E2E flow by calling the Rest APIs includes authentication & etc).
+* Integration testing (complete E2E flow by calling the Rest APIs which includes authentication, service layers, repository layers & etc).
 
 #### Running test cases
 ```mvn test```
